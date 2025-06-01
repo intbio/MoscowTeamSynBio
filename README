@@ -1,19 +1,35 @@
-Fluorescence Prediction for GFP Mutants
-Project Overview
-This repository contains a deep learning model for predicting the fluorescence brightness of mutant GFP (Green Fluorescent Protein) variants based on their amino acid sequences. The model uses protein sequence embeddings from esm2_t30_150M_UR50D and a custom ResNet-based architecture to achieve high-accuracy brightness predictions.
+# GFP Fluorescence Prediction Model
 
-Key Features
-✔ Sequence Processing Pipeline: Filters invalid mutations (*, .) and clusters sequences by brightness.
-✔ ESM-2 Embeddings: Leverages state-of-the-art protein language models for feature extraction.
-✔ Deep ResNet Model:
+## Model Architecture
+The fluorescence prediction system uses a deep learning approach with the following components:
 
-10 blocks with batch normalization, ReLU, and skip connections.
+### Data Processing Pipeline
+1. **Input Filtering**:
+   - Discards sequences containing invalid characters (`*`, `.`)
+   - Processes only valid GFP mutant sequences
 
-Trained with Adam optimizer (MAE loss, lr=2e-5).
-✔ High Performance:
+2. **Brightness Clustering**:
+   - Uses KMeans to group sequences into 2 clusters (high/low brightness)
+   - Selects only sequences from the high-brightness cluster (label=1) for training
 
-Test MAE = 0.11
+3. **Feature Extraction**:
+   - Generates protein embeddings using `esm2_t30_150M_UR50D` from HuggingFace
+   - Embedding generation performed on NVIDIA RTX A5000 GPU (~40 minutes)
 
-Unbiased predictions (error peak at 0)
+4. **Dataset Splitting**:
+   - 70% training
+   - 15% validation
+   - 15% test
 
-Correlation = 0.84 (predictions vs. true values)
+### Neural Network Design
+```python
+ResNet-style architecture:
+- 10 sequential blocks
+- Each block contains:
+  * Batch normalization
+  * ReLU activation
+  * 2 linear layers with Dropout
+  * Skip connection
+- Optimizer: Adam (lr=2e-5)
+- Loss: MAE
+- Training: 2200 epochs
