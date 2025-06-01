@@ -1,5 +1,0 @@
-Readme
-Step 1 - ot this step we used the TemBERTure model in order to get thermophilicity score and melting temperature scores predictions. CSV files with sequences were used. 
-As an outpoot files we got fasta-file for further step and csv-file with the results of the predictions 
-Step 2 - at tis step we used TEmStaPro model in order to get additional stability scores at different temperatures. We used fasta-files from previous step as an input file. As an output we got tsv-file with predictions
-Step 3 - at this step we combined data from both outpoot files from previous steps, added protein characteristics using BioPython an, trained the ExtraTreesClassifier model to predict the class of the sequence (0 - functional temperature < 70 °C, 1 - functional temperature > 70°C). Finally we predicted the class scores for experimental data ind got csv-file with final results.
